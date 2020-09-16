@@ -4,14 +4,12 @@ import com.frontlinerlzx.contentcenter.domain.dto.content.ShareDTO;
 import com.frontlinerlzx.contentcenter.domain.dto.user.UserDTO;
 import com.frontlinerlzx.contentcenter.domain.entity.content.Share;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.List;
 
 /**
  * 创建者： 李芝贤
@@ -19,6 +17,7 @@ import java.util.List;
  * 类说明：
  */
 @Service
+@Slf4j
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class ShareService {
 
@@ -31,22 +30,16 @@ public class ShareService {
     public ShareDTO findById(Integer id) {
         Share share = shareMapper.selectByPrimaryKey(id);
         Integer userId = share.getUserId();
-        List<ServiceInstance> instances = discoveryClient.getInstances("user-center");
-        ServiceInstance usercenter = instances.get(0);
-        System.out.println(id);
-        String url = usercenter.getUri()+"/users/{id}";
+        //找到指定服务
+        //Ribbon会根据user-center找到指定的服务uri进行请求，实现负载均衡+uri自动获取
         UserDTO userDTO = restTemplate.getForObject(
-                url,
+                "http://user-center/users/{userId}",
                 UserDTO.class, userId
         );
-
         //消息的装配
-
         ShareDTO shareDTO = new ShareDTO();
         BeanUtils.copyProperties(share,shareDTO);
         shareDTO.setWxNickname(userDTO.getWxNickname());
-
-
         return shareDTO;
     }
 
