@@ -9,9 +9,25 @@ spring:
       driver-class-name: com.mysql.cj.jdbc.Driver
   application:
     name: content-center
+  main:
+    allow-bean-definition-overriding: true
+
   cloud:
     nacos:
       discovery:
         server-addr: localhost:8848
+        cluster-name: BJ
 server:
-  port: 8082
+  port: 9090
+
+#user-center:
+#  ribbon:
+#    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule
+logging:
+  level:
+    com.frontlinerlzx.contentcenter.feighclient.UserCenterFeignClient: debug
+feign:
+  client:
+    config:
+      default:
+        loggerLevel: full

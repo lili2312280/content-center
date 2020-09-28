@@ -1,6 +1,9 @@
 package com.frontlinerlzx.contentcenter.controller;
 import com.frontlinerlzx.contentcenter.dao.content.ShareMapper;
+import com.frontlinerlzx.contentcenter.domain.dto.user.UserDTO;
 import com.frontlinerlzx.contentcenter.domain.entity.content.Share;
+import com.frontlinerlzx.contentcenter.feighclient.TestBaiDuFeignClient;
+import com.frontlinerlzx.contentcenter.feighclient.TestUserCenterFeignClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
@@ -58,5 +61,18 @@ public class TestController {
         //2.做查询
         List<Share> shares = shareMapper.selectAll();
         return shares;
+    }
+    @Autowired
+    private TestUserCenterFeignClient testUserCenterFeignClient;
+    @GetMapping("test-get")
+    public UserDTO query(UserDTO userDTO){
+        return testUserCenterFeignClient.query(userDTO);
+    }
+
+    @Autowired
+    private TestBaiDuFeignClient testBaiDuFeignClient;
+    @GetMapping("baidu")
+    public String index(UserDTO userDTO){
+        return testBaiDuFeignClient.index();
     }
 }
