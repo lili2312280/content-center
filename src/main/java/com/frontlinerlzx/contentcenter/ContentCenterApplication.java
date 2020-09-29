@@ -12,10 +12,10 @@ import tk.mybatis.spring.annotation.MapperScan;
 @MapperScan("com.frontlinerlzx")
 @SpringBootApplication
 @EnableFeignClients
-public class UserCenterApplication {
+public class ContentCenterApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(UserCenterApplication.class, args);
+        SpringApplication.run(ContentCenterApplication.class, args);
     }
 
 //    在Spring容器中创建一个对象，类型RestTemplate 名称/ID 是restTemplate

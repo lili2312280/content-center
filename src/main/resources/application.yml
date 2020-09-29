@@ -11,12 +11,15 @@ spring:
     name: content-center
   main:
     allow-bean-definition-overriding: true
-
   cloud:
     nacos:
       discovery:
         server-addr: localhost:8848
         cluster-name: BJ
+    sentinel:
+      transport:
+        dashboard: 127.0.0.1:8080
+
 server:
   port: 9090
 
@@ -31,3 +34,15 @@ feign:
     config:
       default:
         loggerLevel: full
+  httpclient:
+    # 让feign使用apche httpclient做请求 而不是默认的url
+    enabled: true
+    # feign最大连接数
+    max-connections: 200
+    # feign单个路径的最大连接数
+    max-connections-per-route: 50
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
